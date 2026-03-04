@@ -5,7 +5,7 @@ import path from 'path';
 
 import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
-//import authRoutes from '../src/routes/auth.route.js';
+import { connectDB } from './lib/db.js';
 dotenv.config();//For loading the .env file
 
 const app = express();
@@ -14,6 +14,8 @@ const _dirname = path.resolve();
 //console.log(process.env.PORT);//For ACCESSING THE .ENV FILE
 
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());//req.body//middleware to extract email and password from the request body in JSON format
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
@@ -26,4 +28,7 @@ if(process.env.NODE_ENV == "production"){
     })
 }
 ////////////////////////
-app.listen(PORT,() => console.log('Server running on port : ' + PORT));
+app.listen(PORT,() => {
+    console.log('Server running on port : ' + PORT);
+    connectDB();
+});
