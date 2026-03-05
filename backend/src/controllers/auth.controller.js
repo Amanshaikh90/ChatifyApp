@@ -105,3 +105,21 @@ export const logout = (_,res) => {
     res.cookie("jwt" ,"",{maxAge:0});//to delete the cookie we set the maxAge to 0, and set the value to empty string)
     res.status(200).json({message:"Logged out successfully"});
 };
+
+export const updateProfile = async (req, res) => {
+    try {
+        const { profilePic } = req.body;
+        if(!profilePic) return res.status(400).json({ message: "Profile pic is required" });
+
+        const userId = req.user._id;//we can access the user object in the request object because we have attached the user object to the request object in the protectRoute middleware, which is used to protect this route, so only authenticated users can access this route
+
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);//we are uploading the profile pic to cloudinary and getting the response which contains the url of the uploaded image
+
+        const updatedUser = await User.findByIdAndUpdate(userId, { profilePic: uploadResponse.secure_url }, { new: true });
+
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
