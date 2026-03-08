@@ -6,7 +6,7 @@ import { MessageCircleIcon, LockIcon, MailIcon, UserIcon, LoaderIcon } from "luc
 import { Link } from 'react-router-dom'
 
 
-
+ 
 function SignUpPage() {
 
 const [formData, setFormData] = useState({fullName: "", email: "", password: ""})
