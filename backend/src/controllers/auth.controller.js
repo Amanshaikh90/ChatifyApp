@@ -42,12 +42,12 @@ export const signup = async (req,res) => {
         })
 
         if(newUser){
-            /*generateTocken(newUser._id, res);
+            /*generateToken(newUser._id, res);
             await newUser.save();*/
 
             //Persist user first, then issue auth cookie, to avoid issuing cookie if there is an error while saving user to database
             const savedUser = await newUser.save();//first saving the user in database
-            generateTocken(savedUser._id,res);//then generating the token and sending it in the response, we can also send the user data in the response if we want to, but for now we will just send the token in the response
+            generateToken(savedUser._id,res);//then generating the token and sending it in the response, we can also send the user data in the response if we want to, but for now we will just send the token in the response
 
             res.status(201).json({
                 _id: newUser._id,
