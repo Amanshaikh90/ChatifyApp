@@ -1,13 +1,16 @@
 //const express = require('express');
 import express from 'express';
+import cookieParser from "cookie-parser";
 import { ENV} from "./lib/env.js";
 import path from 'path';
 import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
 import { connectDB } from './lib/db.js';
+import cors from "cors";
 //dotenv.config();//For loading the .env file
 
 const app = express();
+
 const _dirname = path.resolve();
 
 //console.log(process.env.PORT);//For ACCESSING THE .ENV FILE
@@ -15,6 +18,8 @@ const _dirname = path.resolve();
 const PORT = ENV.PORT || 3000;
 
 app.use(express.json());//req.body//middleware to extract email and password from the request body in JSON format
+app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));//Allow cross-origin requests from the frontend URL and include credentials (cookies) in the requests
+app.use(cookieParser());//Parse cookies from incoming requests and populate req.cookies with an object containing the cookie values
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
