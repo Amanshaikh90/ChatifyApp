@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react'
-import { useChatStore } from '../store/useChatStore'
-import UsersLoadingSkeleton from './UsersLoadingSkeleton';
+import { useEffect } from "react";
+import { useChatStore } from "../store/useChatStore";
+import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
+import NoChatsFound from "./NoChatsFound";
+import { useAuthStore } from "../store/useAuthStore";
+function ChatsList() {
+  const { getMyChatPartners, chats, isUsersLoading, setSelectedUser } = useChatStore();
+  const { onlineUsers } = useAuthStore();
 
-function ContactList() { 
-  const { getAllContacts, allContacts, setSelectedUser, isUsersLoading } = useChatStore();
+  useEffect(() => {
+    getMyChatPartners();
+  }, [getMyChatPartners]);
 
-useEffect(()=> {
-  getAllContacts();
-},[getAllContacts]);
-
-if (isUsersLoading) return <UsersLoadingSkeleton/>;
-
+  if (isUsersLoading) return <UsersLoadingSkeleton />;
+  if (chats.length === 0) return <NoChatsFound />;
 
   return (
     <>
@@ -33,5 +35,4 @@ if (isUsersLoading) return <UsersLoadingSkeleton/>;
     </>
   );
 }
-
-export default ContactList
+export default ChatsList;

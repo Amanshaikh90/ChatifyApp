@@ -17,7 +17,8 @@ const _dirname = path.resolve();
 
 const PORT = ENV.PORT || 3000;
 
-app.use(express.json());//req.body//middleware to extract email and password from the request body in JSON format
+// Add these lines BEFORE your routes
+app.use(express.json({ limit: "10mb" })); 
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));//Allow cross-origin requests from the frontend URL and include credentials (cookies) in the requests
 app.use(cookieParser());//Parse cookies from incoming requests and populate req.cookies with an object containing the cookie values
 
